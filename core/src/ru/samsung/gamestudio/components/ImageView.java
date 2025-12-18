@@ -15,7 +15,10 @@ public class ImageView extends View {
 
 
         //smth
+        // smth new
+        // release smth
     }
+
 
     @Override
     public void draw(SpriteBatch batch) {
