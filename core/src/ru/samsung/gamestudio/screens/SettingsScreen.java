@@ -11,6 +11,7 @@ import ru.samsung.gamestudio.MyGdxGame;
 import ru.samsung.gamestudio.components.ButtonView;
 import ru.samsung.gamestudio.components.ImageView;
 import ru.samsung.gamestudio.components.MovingBackgroundView;
+import ru.samsung.gamestudio.components.RecordsListView;
 import ru.samsung.gamestudio.components.TextView;
 
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class SettingsScreen extends ScreenAdapter {
     TextView musicSettingView;
     TextView soundSettingView;
     TextView clearSettingView;
+    TextView recordsTitleView;
+    RecordsListView recordsListView;
 
     public SettingsScreen(MyGdxGame myGdxGame) {
         this.myGdxGame = myGdxGame;
@@ -55,6 +58,18 @@ public class SettingsScreen extends ScreenAdapter {
                 "return"
         );
 
+        // Изменено: добавлен вывод таблицы рекордов в настройках
+        // Изменено: список рекордов рисуется под настройками, без центрирования
+        recordsTitleView = new TextView(myGdxGame.commonWhiteFont, 173, 520, "records:");
+        recordsListView = new RecordsListView(myGdxGame.commonWhiteFont, 173, 470, false);
+        refreshRecordsList();
+    }
+
+    @Override
+    public void show() {
+        // Изменено: обновление таблицы рекордов при открытии настроек
+        refreshRecordsList();
+        clearSettingView.setText("clear records");
     }
 
     @Override
@@ -71,6 +86,9 @@ public class SettingsScreen extends ScreenAdapter {
         backgroundView.draw(myGdxGame.batch);
         titleTextView.draw(myGdxGame.batch);
         blackoutImageView.draw(myGdxGame.batch);
+        // Изменено: вывод таблицы рекордов в меню настроек
+        recordsTitleView.draw(myGdxGame.batch);
+        recordsListView.draw(myGdxGame.batch);
         returnButton.draw(myGdxGame.batch);
         musicSettingView.draw(myGdxGame.batch);
         soundSettingView.draw(myGdxGame.batch);
@@ -89,6 +107,8 @@ public class SettingsScreen extends ScreenAdapter {
             if (clearSettingView.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
                 MemoryManager.saveTableOfRecords(new ArrayList<>());
                 clearSettingView.setText("clear records (cleared)");
+                // Изменено: очищение рекордов сразу обновляет список
+                refreshRecordsList();
             }
             if (musicSettingView.isHit(myGdxGame.touch.x, myGdxGame.touch.y)) {
                 MemoryManager.saveMusicSettings(!MemoryManager.loadIsMusicOn());
@@ -101,6 +121,15 @@ public class SettingsScreen extends ScreenAdapter {
                 myGdxGame.audioManager.updateSoundFlag();
             }
         }
+    }
+
+    // Изменено: таблица рекордов подгружается в настройках
+    private void refreshRecordsList() {
+        ArrayList<Integer> records = MemoryManager.loadRecordsTable();
+        if (records == null) {
+            records = new ArrayList<>();
+        }
+        recordsListView.setRecords(records);
     }
 
     private String translateStateToText(boolean state) {

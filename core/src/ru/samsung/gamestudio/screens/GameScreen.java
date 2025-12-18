@@ -111,11 +111,13 @@ public class GameScreen extends ScreenAdapter {
 
         if (gameSession.state == GameState.PLAYING) {
             if (gameSession.shouldSpawnTrash()) {
-                TrashObject trashObject = new TrashObject(
-                        GameSettings.TRASH_WIDTH, GameSettings.TRASH_HEIGHT,
-                        GameResources.TRASH_IMG_PATH,
-                        myGdxGame.world
-                );
+                // Изменено: спавн метеоритов с 30% шансом и 2 жизнями
+                // TrashObject trashObject = new TrashObject(
+                //         GameSettings.TRASH_WIDTH, GameSettings.TRASH_HEIGHT,
+                //         GameResources.TRASH_IMG_PATH,
+                //         myGdxGame.world
+                // );
+                TrashObject trashObject = createSpaceObjectWithChance();
                 trashArray.add(trashObject);
             }
 
@@ -212,13 +214,29 @@ public class GameScreen extends ScreenAdapter {
 
     }
 
+    // Изменено: вспомогательный метод для спавна мусора и метеоритов
+    private TrashObject createSpaceObjectWithChance() {
+        boolean isMeteorite = Math.random() < 0.3f;
+        String texturePath = isMeteorite ? GameResources.METEORITE_IMG_PATH : GameResources.TRASH_IMG_PATH;
+        int lives = isMeteorite ? 2 : 1;
+        return new TrashObject(
+                GameSettings.TRASH_WIDTH, GameSettings.TRASH_HEIGHT,
+                texturePath,
+                myGdxGame.world,
+                isMeteorite,
+                lives
+        );
+    }
+
     private void updateTrash() {
         for (int i = 0; i < trashArray.size(); i++) {
 
             boolean hasToBeDestroyed = !trashArray.get(i).isAlive() || !trashArray.get(i).isInFrame();
 
             if (!trashArray.get(i).isAlive()) {
-                gameSession.destructionRegistration();
+                // Изменено: регистрация уничтожения учитывает метеориты
+                // gameSession.destructionRegistration();
+                gameSession.destructionRegistration(trashArray.get(i).isMeteorite());
                 if (myGdxGame.audioManager.isSoundOn) myGdxGame.audioManager.explosionSound.play(0.2f);
             }
 

@@ -13,6 +13,7 @@ public class GameSession {
     long pauseStartTime;
     private int score;
     int destructedTrashNumber;
+    int destructedMeteoriteNumber;
 
     public GameSession() {
     }
@@ -21,6 +22,7 @@ public class GameSession {
         state = GameState.PLAYING;
         score = 0;
         destructedTrashNumber = 0;
+        destructedMeteoriteNumber = 0;
         sessionStartTime = TimeUtils.millis();
         nextTrashSpawnTime = sessionStartTime + (long) (GameSettings.STARTING_TRASH_APPEARANCE_COOL_DOWN
                 * getTrashPeriodCoolDown());
@@ -51,12 +53,22 @@ public class GameSession {
         MemoryManager.saveTableOfRecords(recordsTable);
     }
 
-    public void destructionRegistration() {
-        destructedTrashNumber += 1;
+    // Изменено: уничтожения учитывают метеориты с повышенными очками
+    // public void destructionRegistration() {
+    //     destructedTrashNumber += 1;
+    // }
+    public void destructionRegistration(boolean isMeteorite) {
+        if (isMeteorite) {
+            destructedMeteoriteNumber += 1;
+        } else {
+            destructedTrashNumber += 1;
+        }
     }
 
     public void updateScore() {
-        score = (int) (TimeUtils.millis() - sessionStartTime) / 100 + destructedTrashNumber * 100;
+        score = (int) (TimeUtils.millis() - sessionStartTime) / 100
+                + destructedTrashNumber * 100
+                + destructedMeteoriteNumber * 150;
     }
 
     public int getScore() {

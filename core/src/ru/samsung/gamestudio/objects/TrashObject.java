@@ -11,8 +11,11 @@ public class TrashObject extends GameObject {
     private static final int paddingHorizontal = 30;
 
     private int livesLeft;
+    private final boolean isMeteorite;
 
-    public TrashObject(int width, int height, String texturePath, World world) {
+    // Изменено: добавлены параметры количества жизней и флага метеорита
+    // public TrashObject(int width, int height, String texturePath, World world) {
+    public TrashObject(int width, int height, String texturePath, World world, boolean isMeteorite, int lives) {
         super(
                 texturePath,
                 width / 2 + paddingHorizontal + (new Random()).nextInt((GameSettings.SCREEN_WIDTH - 2 * paddingHorizontal - width)),
@@ -23,7 +26,10 @@ public class TrashObject extends GameObject {
         );
 
         body.setLinearVelocity(new Vector2(0, -GameSettings.TRASH_VELOCITY));
-        livesLeft = 1;
+        // Изменено: количество жизней задается при создании
+        // livesLeft = 1;
+        livesLeft = lives;
+        this.isMeteorite = isMeteorite;
     }
 
     public boolean isAlive() {
@@ -37,5 +43,9 @@ public class TrashObject extends GameObject {
     @Override
     public void hit() {
         livesLeft -= 1;
+    }
+
+    public boolean isMeteorite() {
+        return isMeteorite;
     }
 }

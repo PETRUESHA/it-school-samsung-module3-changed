@@ -9,9 +9,19 @@ import java.util.ArrayList;
 
 public class RecordsListView extends TextView {
 
+    // Изменено: добавлена поддержка выравнивания по заданному X
     public RecordsListView(BitmapFont font, float y) {
         super(font, 0, y, "");
+        shouldCenterX = true;
     }
+
+    // Изменено: добавлен конструктор с настройкой выравнивания
+    public RecordsListView(BitmapFont font, float x, float y, boolean shouldCenterX) {
+        super(font, x, y, "");
+        this.shouldCenterX = shouldCenterX;
+    }
+
+    private boolean shouldCenterX = true;
 
     public void setRecords(ArrayList<Integer> recordsList) {
         text = "";
@@ -22,7 +32,11 @@ public class RecordsListView extends TextView {
         }
 
         GlyphLayout glyphLayout = new GlyphLayout(font, text);
-        x = (GameSettings.SCREEN_WIDTH - glyphLayout.width) / 2;
+        width = glyphLayout.width;
+        height = glyphLayout.height;
+        if (shouldCenterX) {
+            x = (GameSettings.SCREEN_WIDTH - glyphLayout.width) / 2;
+        }
     }
 
 }

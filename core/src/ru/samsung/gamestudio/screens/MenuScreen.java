@@ -42,6 +42,9 @@ public class MenuScreen extends ScreenAdapter {
 
         myGdxGame.batch.begin();
 
+        // Изменено: фон меню теперь двигается как в игре
+        // backgroundView.draw(myGdxGame.batch);
+        backgroundView.move();
         backgroundView.draw(myGdxGame.batch);
         titleView.draw(myGdxGame.batch);
         exitButtonView.draw(myGdxGame.batch);

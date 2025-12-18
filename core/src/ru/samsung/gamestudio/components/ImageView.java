@@ -12,6 +12,9 @@ public class ImageView extends View {
         texture = new Texture(imagePath);
         this.width = texture.getWidth() ;
         this.height = texture.getHeight() ;
+
+
+        //smth
     }
 
     @Override

@@ -19,6 +19,8 @@ public class GameResources {
     public static final String BULLET_IMG_PATH = "textures/bullet.png";
     public static final String SHIP_IMG_PATH = "textures/ship.png";
     public static final String TRASH_IMG_PATH = "textures/trash.png";
+    // Изменено: добавлен путь к текстуре метеорита
+    public static final String METEORITE_IMG_PATH = "textures/meteorite.png";
 
     // Sounds and music for audio
 

@@ -29,6 +29,8 @@ public class ButtonView extends View {
 
         textX = x + (width - textWidth) / 2;
         textY = y + (height + textHeight) / 2;
+
+        // smth else
     }
 
     public ButtonView(float x, float y, float width, float height, String texturePath) {
